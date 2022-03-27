@@ -117,7 +117,9 @@ export default function App() {
   function handleChoose() {
     setChoices((prevState) => prevState.filter((e) => e !== ""));
 
-    if (choices.length === 1) return;
+    if (choices.length === 1) {
+      setChoices(["yes", "no"]);
+    }
 
     setChosen(Math.floor(Math.random() * choices.length));
   }
@@ -151,7 +153,6 @@ export default function App() {
         <View style={styles.buttonsContainer}>
           <ButtonDanger onPress={handleClear} />
           <ButtonPrimary
-            disabled={choices.length === 1 ? true : false}
             onPress={handleChoose}
           />
         </View>
