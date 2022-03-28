@@ -40,11 +40,9 @@ export default function App() {
       return;
     }
 
-    if (choiceText.length > 0) {
       const newChoices = choices.map((e, i) => (i === id ? choiceText : e));
       setChoices(newChoices);
       return;
-    }
   }
 
   useEffect(() => {
