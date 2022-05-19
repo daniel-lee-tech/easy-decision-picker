@@ -40,9 +40,9 @@ export default function App() {
       return;
     }
 
-      const newChoices = choices.map((e, i) => (i === id ? choiceText : e));
-      setChoices(newChoices);
-      return;
+    const newChoices = choices.map((e, i) => (i === id ? choiceText : e));
+    setChoices(newChoices);
+    return;
   }
 
   useEffect(() => {
@@ -54,26 +54,7 @@ export default function App() {
       alert("Max 9 choices");
       setChoices((prevState) => prevState.slice(0, 9));
     }
-
-    if (
-      choices[choices.length - 1] === "" &&
-      choices[choices.length - 2] === ""
-    ) {
-      setChoices((prevState) => prevState.slice(0, choices.length - 1));
-    }
   }, [choices]);
-
-  function renderChoices(choices: string[]) {
-    return choices.map((e, i) => (
-      <ChoiceInput
-        chosenId={chosen}
-        key={i}
-        id={i}
-        choiceText={e}
-        updateCallback={updateChoicesFromChildInput}
-      />
-    ));
-  }
 
   function handleClear() {
     setChosen(null);
@@ -88,28 +69,29 @@ export default function App() {
         setChosen(null);
       }
 
+      if (choices.length > 8) {
+        alert("only 9 choices");
+        return;
+      }
+
       setChoices((prev) => [...prev, ""]);
     }
 
-    if (
-      choices.length !== 0 &&
-      choices.length <= 8 &&
-      choices[choices.length - 1] !== ""
-    ) {
-      return (
-        <Pressable
-          style={{
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: "#D9E3F0",
-            padding: 8,
-          }}
-          onPress={handlePress}
-        >
-          <Feather name="plus" size={24} color="#D9E3F0" />
-        </Pressable>
-      );
-    }
+    return (
+      <Pressable
+        style={{
+          borderWidth: 2,
+          borderRadius: 10,
+          borderColor: "#D9E3F0",
+          paddingHorizontal: 20,
+          paddingVertical: 20,
+          justifyContent: "center",
+        }}
+        onPress={handlePress}
+      >
+        <Feather name="plus" size={24} color="#D9E3F0" />
+      </Pressable>
+    );
   }
 
   function handleChoose() {
@@ -145,14 +127,20 @@ export default function App() {
           />
         </View>
         <View style={styles.answersContainer}>
-          {renderChoices(choices)}
-          {renderAddNewButton(choices)}
+          {choices.map((e, i) => (
+            <ChoiceInput
+              chosenId={chosen}
+              key={i}
+              id={i}
+              choiceText={e}
+              updateCallback={updateChoicesFromChildInput}
+            />
+          ))}
         </View>
         <View style={styles.buttonsContainer}>
           <ButtonDanger onPress={handleClear} />
-          <ButtonPrimary
-            onPress={handleChoose}
-          />
+          {renderAddNewButton(choices)}
+          <ButtonPrimary onPress={handleChoose} />
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -165,11 +153,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     color: "#D9E3F0",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
+    paddingVertical: 40,
   },
   questionContainer: {
     width: "100%",
     alignItems: "center",
+    marginVertical: 20,
   },
   title: {
     fontSize: 30,
@@ -178,12 +168,13 @@ const styles = StyleSheet.create({
   answersContainer: {
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   buttonsContainer: {
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-around",
+    marginTop: "auto",
   },
   questionInput: {
     borderColor: "#D9E3F0",
